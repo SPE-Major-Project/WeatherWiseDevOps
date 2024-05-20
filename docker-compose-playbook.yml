@@ -1,5 +1,5 @@
 ---
-- name: Ensure Docker and Docker Compose are running
+- name: Deploy Docker Compose services
   hosts: myhosts
   become: yes
 
@@ -34,7 +34,7 @@
       get_url:
         url: https://github.com/docker/compose/releases/download/1.29.2/docker-compose-`uname -s`-`uname -m`
         dest: /usr/local/bin/docker-compose
-        mode: '0755'
+        mode: "0755"
 
     - name: Ensure Docker service is running
       service:
@@ -42,15 +42,9 @@
         state: started
         enabled: yes
 
-    - name: Copy Docker Compose file to remote host
-      copy:
-        src: ./docker-compose.yml
-        dest: "/home/{{ ansible_user }}/docker-compose.yml"
-        owner: "{{ ansible_user }}"
-        group: "{{ ansible_user }}"
-        mode: '0644'
+    - name: Change directory to where the Docker Compose file is located
+      ansible.builtin.cd:
+        path: /devops
 
     - name: Run Docker Compose
       command: docker-compose up -d
-      args:
-        chdir: "/home/{{ ansible_user }}"
