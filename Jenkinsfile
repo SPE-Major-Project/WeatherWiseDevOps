@@ -41,8 +41,10 @@ pipeline {
             steps {
                 script {
                     withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
-                        dir('devops') {
+                        dir('frontend') {
                             sh "docker build -t 48483/weatherwisefrontend:latest -f DockerFileFrontend ."
+                        }
+                        dir('backend') {
                             sh "docker build -t 48483/weatherwisebackend:latest -f DockerFileBackend ."
                         }
                     }
