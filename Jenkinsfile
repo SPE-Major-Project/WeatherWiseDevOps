@@ -16,12 +16,12 @@ pipeline {
     stages {
         stage('Checkout Code') {
             steps {
-                dir('frontend') {
-                    git branch: 'main', credentialsId: 'git-cred', url: 'https://github.com/SPE-Major-Project/WeatherWiseFrontend.git'
-                }
-                dir('backend') {
-                    git branch: 'main', credentialsId: 'git-cred', url: 'https://github.com/SPE-Major-Project/WeatherWiseBackend.git'
-                }
+                // dir('frontend') {
+                //     git branch: 'main', credentialsId: 'git-cred', url: 'https://github.com/SPE-Major-Project/WeatherWiseFrontend.git'
+                // }
+                // dir('backend') {
+                //     git branch: 'main', credentialsId: 'git-cred', url: 'https://github.com/SPE-Major-Project/WeatherWiseBackend.git'
+                // }
                 dir('devops') {
                     git branch: 'main', credentialsId: 'git-cred', url: 'https://github.com/SPE-Major-Project/WeatherWiseDevOps.git'
                 }
