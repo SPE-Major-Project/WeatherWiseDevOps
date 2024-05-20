@@ -73,7 +73,7 @@ pipeline {
 
                     // Run the Ansible playbook
                     sh """
-                        ansible-playbook -i ./devops/inventory.ini ./devops/docker-compose-playbook.yml
+                        ansible-playbook -i /devops/inventory.ini /devops/docker-compose-playbook.yml
                     """
                 }
             }
