@@ -3,7 +3,11 @@
   hosts: localhost
   gather_facts: no
   tasks:
-    - name: Run Docker Compose
+    - name: Run Docker Compose For Application
       command: docker-compose up -d
       args:
         chdir: /var/lib/jenkins/workspace/WeatherWise/devops
+    - name: Run Docker Compose For ELK
+      command: docker-compose up -d
+      args:
+        chdir: /var/lib/jenkins/workspace/WeatherWise/devops/elk-docker-compose
