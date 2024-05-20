@@ -6,4 +6,4 @@
     - name: Run Docker Compose
       command: docker-compose up -d
       args:
-        chdir: /var/lib/jenkins/workspace/Weatherwise/devops
+        chdir: /var/lib/jenkins/workspace/WeatherWise/devops
