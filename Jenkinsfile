@@ -9,8 +9,8 @@ pipeline {
     
     environment {
         SCANNER_HOME= tool 'sonar-scanner'
-        ANSIBLE_INVENTORY = 'inventory.ini'
-        ANSIBLE_PLAYBOOK = 'docker-compose-playbook.yml'
+        // ANSIBLE_INVENTORY = 'inventory.ini'
+        // ANSIBLE_PLAYBOOK = 'docker-compose-playbook.yml'
     }
     
     stages {
