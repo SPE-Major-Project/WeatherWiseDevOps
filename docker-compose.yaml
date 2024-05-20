@@ -1,0 +1,54 @@
+version: "3.8"
+
+services:
+  backend:
+    image: 48483/weatherwisebackend:latest
+    ports:
+      - "8082:8082"
+    networks:
+      - wise
+    environment:
+      # &useSSL=false&allowPublicKeyRetrieval=true&autoReconnect=true
+      DB_URL: jdbc:mysql://db:3306/weatherwise?createDatabaseIfNotExist=true
+      DB_USERNAME: root
+      DB_PASSWORD: Rishabh@1234
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: mysql:latest
+    environment:
+      DATABASE_HOST: docker-mysql
+      DATABASE_PORT: 3306
+      MYSQL_ROOT_PASSWORD: Rishabh@1234
+      MYSQL_DATABASE: weatherwise
+      # MYSQL_USER: admin
+      # MYSQL_PASSWORD: Rishabh@1234
+    networks:
+      - wise
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+    volumes:
+      - database-volume:/var/lib/mysql
+
+  frontend:
+    image: 48483/weatherwisefrontend:latest
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      - wise
+
+volumes:
+  database-volume:
+
+networks:
+  wise:
