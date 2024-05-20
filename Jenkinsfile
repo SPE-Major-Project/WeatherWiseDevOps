@@ -68,7 +68,7 @@ pipeline {
         stage('Run Ansible Playbook') {
             steps {
                 ansiblePlaybook(
-                    playbook: './devops/deploy_docker_compose.yml',
+                    playbook: './devops/docker-compose-playbook.yml',
                     inventory: './devops/inventory'
                 )
             }
