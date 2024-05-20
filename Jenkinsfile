@@ -9,6 +9,8 @@ pipeline {
     
     environment {
         SCANNER_HOME= tool 'sonar-scanner'
+        ANSIBLE_INVENTORY = 'inventory.ini'
+        ANSIBLE_PLAYBOOK = 'docker-compose-playbook.yml'
     }
     
     stages {
@@ -61,6 +63,21 @@ pipeline {
                     }
                 }
             }
-        }    
+        }  
+
+        stage('Run Ansible Playbook') {
+            steps {
+                script {
+                    // Ensure Ansible is installed
+                    sh 'ansible --version'
+
+                    // Run the Ansible playbook
+                    sh """
+                        ansible-playbook -i ./devops/inventory.ini ./devops/docker-compose-playbook.yml
+                    """
+                }
+            }
+        }
+
     }
 }
