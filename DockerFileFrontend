@@ -2,7 +2,7 @@ FROM node:alpine AS development
 EXPOSE 3000
 ENV NODE_ENV development
 WORKDIR /react-app
-COPY ../devops/package*.json /react-app
+COPY ../frontend/package*.json /react-app
 RUN npm install
 COPY . .
 CMD ["npm","start"]
