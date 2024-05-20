@@ -8,7 +8,6 @@ services:
     networks:
       - wise
     environment:
-      # &useSSL=false&allowPublicKeyRetrieval=true&autoReconnect=true
       DB_URL: jdbc:mysql://db:3306/weatherwise?createDatabaseIfNotExist=true
       DB_USERNAME: root
       DB_PASSWORD: Rishabh@1234
@@ -23,8 +22,6 @@ services:
       DATABASE_PORT: 3306
       MYSQL_ROOT_PASSWORD: Rishabh@1234
       MYSQL_DATABASE: weatherwise
-      # MYSQL_USER: admin
-      # MYSQL_PASSWORD: Rishabh@1234
     networks:
       - wise
     ports:
@@ -37,7 +34,6 @@ services:
 
     volumes:
       - database-volume:/var/lib/mysql
-
   frontend:
     image: 48483/weatherwisefrontend:latest
     ports:
@@ -46,7 +42,6 @@ services:
       - backend
     networks:
       - wise
-
 volumes:
   database-volume:
 
