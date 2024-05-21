@@ -4,16 +4,16 @@
   gather_facts: no
   tasks:
     
-    - name: Get Docker image facts
-      docker_image_facts:
+    # - name: Get Docker image facts
+    #   docker_image_facts:
 
     
-    - name: Remove Docker images not tagged as "latest"
-      docker_image:
-        name: "{{ item }}"
-        state: absent
-      loop: "{{ ansible_facts.docker_images }}"
-      when: "'latest' not in item.tags"
+    # - name: Remove Docker images not tagged as "latest"
+    #   docker_image:
+    #     name: "{{ item }}"
+    #     state: absent
+    #   loop: "{{ ansible_facts.docker_images }}"
+    #   when: "'latest' not in item.tags"
 
     - name: Remoce orphans for Application
       command: docker-compose down --remove-orphans
