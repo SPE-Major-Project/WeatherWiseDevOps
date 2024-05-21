@@ -32,7 +32,7 @@ services:
       retries: 3
     volumes:
       - database-volume:/var/lib/mysql
-  
+
   frontend:
     image: 48483/weatherwisefrontend:latest
     ports:
@@ -41,69 +41,8 @@ services:
       - backend
     networks:
       - wise
-  
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.9
-    container_name: elasticsearch
-    environment:
-      - discovery.type=single-node
-      - ES_JAVA_OPTS=-Xms1g -Xmx1g
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-    volumes:
-      - es_data:/usr/share/elasticsearch/data
-    ports:
-      - 9200:9200
-      - 9300:9300
-    networks:
-      - wise
-      - elastic
-
-  kibana:
-    image: docker.elastic.co/kibana/kibana:7.17.9
-    ports:
-      - "5601:5601"
-    depends_on:
-      - elasticsearch
-    environment:
-      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
-    networks:
-      - wise
-
-  logstash:
-    image: docker.elastic.co/logstash/logstash:7.17.9
-    ports:
-      - "5044:5044"
-      - "12201:12201/udp"
-    depends_on:
-      - elasticsearch
-    volumes:
-      - ./logstash.conf:/usr/share/logstash/pipeline/logstash.conf
-    environment:
-      - xpack.monitoring.elasticsearch.hosts=["http://elasticsearch:9200"]
-    networks:
-      - wise
-
-  filebeat:
-    image: docker.elastic.co/beats/filebeat:7.17.9
-    depends_on:
-      - logstash
-    volumes:
-      - ./filebeat.yml:/usr/share/filebeat/filebeat.yml
-      - /var/lib/jenkins/workspace/WeatherWise/backend/logs:/app/logs  # Mount the logs directory from the host
-      - /var/lib/docker/containers:/var/lib/docker/containers:ro
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-    networks:
-      - wise
 volumes:
   database-volume:
-  es_data:
-    driver: local
 
 networks:
   wise:
-    driver: bridge
-  elastic:
-    driver: bridge
