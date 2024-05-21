@@ -3,36 +3,7 @@
   hosts: localhost
   gather_facts: no
   tasks:
-    
-    # - name: Get Docker image facts
-    #   docker_image_facts:
-
-    
-    # - name: Remove Docker images not tagged as "latest"
-    #   docker_image:
-    #     name: "{{ item }}"
-    #     state: absent
-    #   loop: "{{ ansible_facts.docker_images }}"
-    #   when: "'latest' not in item.tags"
-
-    - name: Remoce orphans for Application
-      command: docker-compose down --remove-orphans
-      args:
-        chdir: /var/lib/jenkins/workspace/WeatherWise/devops
-      register: docker_cleanup_result
-
-    - name: Remoce orphans for ELK
-      command: docker-compose down --remove-orphans
-      args:
-        chdir: /var/lib/jenkins/workspace/WeatherWise/devops/elk-docker-compose
-      register: docker_cleanup_result
-
-    - name: Run Docker Compose For Application
+    - name: Run Docker Compose
       command: docker-compose up -d
       args:
         chdir: /var/lib/jenkins/workspace/WeatherWise/devops
-
-    - name: Run Docker Compose For ELK
-      command: docker-compose up -d
-      args:
-        chdir: /var/lib/jenkins/workspace/WeatherWise/devops/elk-docker-compose

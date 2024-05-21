@@ -30,9 +30,9 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
-
     volumes:
       - database-volume:/var/lib/mysql
+  
   frontend:
     image: 48483/weatherwisefrontend:latest
     ports:
