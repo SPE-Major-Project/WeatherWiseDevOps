@@ -3,11 +3,9 @@
   hosts: localhost
   gather_facts: no
   tasks:
-    - name: Gather information about Docker images
-      hosts: localhost
-      tasks:
-        - name: Get Docker image facts
-          docker_image_facts:
+    
+    - name: Get Docker image facts
+      docker_image_facts:
 
     - name: Loop through each image and remove it if not tagged as "latest"
       hosts: localhost
