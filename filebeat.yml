@@ -2,7 +2,7 @@ filebeat.inputs:
 - type: log
   enabled: true
   paths:
-    - ../backend/Springboot-ELK.log
+    - app/logs/app.log
   fields:
     log_type: flask_app_log
 
