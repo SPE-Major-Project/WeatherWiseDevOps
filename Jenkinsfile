@@ -28,16 +28,16 @@ pipeline {
             }
         }
         
-        // stage('Build Code'){
-        //     steps{
-        //         dir('frontend') {
-        //             sh 'npm run build'
-        //         }
-        //         dir('backend') {
-        //             sh 'mvn clean install -DskipTests'
-        //         }
-        //     }
-        // }
+        stage('Build Code'){
+            steps{
+                dir('frontend') {
+                    sh 'npm run build'
+                }
+                dir('backend') {
+                    sh 'mvn clean install -DskipTests'
+                }
+            }
+        }
 
         // stage('File System Scan') {
         //     steps {
