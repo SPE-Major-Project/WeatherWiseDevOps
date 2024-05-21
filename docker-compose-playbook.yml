@@ -7,21 +7,21 @@
       docker_image_facts:
 
     - name: Get list of running containers
-      command: docker ps --format '{{.Image}}'
+      command: docker ps -q
       register: running_containers
 
     - name: Remove Docker images not tagged as "latest" and their containers
       block:
         - name: Loop through each image and remove it if not tagged as "latest"
           command: docker image rm "{{ item }}"
-          loop: "{{ docker_image_list.stdout_lines }}"
-          when: "'latest' not in item"
+          loop: "{{ ansible_facts.docker_images }}"
+          when: "'latest' not in item.tags"
 
         - name: Stop and remove containers corresponding to removed images
           command: docker rm -f "{{ item }}"
           loop: "{{ running_containers.stdout_lines }}"
-          when: "item.split(':')[0] not in docker_image_list.stdout_lines and item != 'IMAGE'"
-
+          when: "item.split(':')[0] not in ansible_facts.docker_images|map(attribute='repository')|list"
+          
     - name: Remoce orphans for Application
       command: docker-compose down --remove-orphans
       args:
