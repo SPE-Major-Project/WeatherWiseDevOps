@@ -12,6 +12,9 @@
 
     - name: Remove Docker images not tagged as "latest" and their containers
       block:
+        - name: Get Docker image facts again
+          docker_image_facts:
+
         - name: Loop through each image and remove it if not tagged as "latest"
           command: docker image rm "{{ item }}"
           loop: "{{ ansible_facts.docker_images }}"
@@ -21,7 +24,7 @@
           command: docker rm -f "{{ item }}"
           loop: "{{ running_containers.stdout_lines }}"
           when: "item.split(':')[0] not in ansible_facts.docker_images|map(attribute='repository')|list"
-          
+
     - name: Remoce orphans for Application
       command: docker-compose down --remove-orphans
       args:
