@@ -3,9 +3,8 @@
   hosts: localhost
   gather_facts: no
   tasks:
-    - name: Get list of Docker images
-      command: docker image ls --format '{{.Repository}}:{{.Tag}}'
-      register: docker_image_list
+    - name: Get Docker image facts
+      docker_image_facts:
 
     - name: Get list of running containers
       command: docker ps --format '{{.Image}}'
