@@ -3,27 +3,21 @@
   hosts: localhost
   gather_facts: no
   tasks:
-    - name: Get Docker image facts
-      docker_image_facts:
-
-    - name: Get list of running containers
-      command: docker ps -q
-      register: running_containers
-
-    - name: Remove Docker images not tagged as "latest" and their containers
-      block:
-        - name: Get Docker image facts again
+    - name: Gather information about Docker images
+      hosts: localhost
+      tasks:
+        - name: Get Docker image facts
           docker_image_facts:
 
-        - name: Loop through each image and remove it if not tagged as "latest"
-          command: docker image rm "{{ item }}"
+    - name: Loop through each image and remove it if not tagged as "latest"
+      hosts: localhost
+      tasks:
+        - name: Remove Docker images not tagged as "latest"
+          docker_image:
+            name: "{{ item }}"
+            state: absent
           loop: "{{ ansible_facts.docker_images }}"
           when: "'latest' not in item.tags"
-
-        - name: Stop and remove containers corresponding to removed images
-          command: docker rm -f "{{ item }}"
-          loop: "{{ running_containers.stdout_lines }}"
-          when: "item.split(':')[0] not in ansible_facts.docker_images|map(attribute='repository')|list"
 
     - name: Remoce orphans for Application
       command: docker-compose down --remove-orphans
