@@ -41,6 +41,7 @@ services:
       - backend
     networks:
       - wise
+
 volumes:
   database-volume:
 
