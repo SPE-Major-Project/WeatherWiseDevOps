@@ -4,6 +4,6 @@
   gather_facts: no
   tasks:
     - name: Run Docker Compose
-      command: docker-compose up -d
+      command: docker-compose up -d --remove-orphans
       args:
         chdir: /var/lib/jenkins/workspace/WeatherWise/devops
