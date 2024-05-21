@@ -99,6 +99,8 @@ services:
       - wise
 volumes:
   database-volume:
+  es_data:
+    driver: local
 
 networks:
   wise:
