@@ -31,7 +31,7 @@ pipeline {
         stage('Build Code'){
             steps{
                 dir('frontend') {
-                    sh 'npm run build'
+                    sh 'npm install && npm run build'
                 }
                 dir('backend') {
                     sh 'mvn clean install -DskipTests'
