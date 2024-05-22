@@ -39,28 +39,28 @@ pipeline {
             }
         }
 
-        // stage('File System Scan') {
-        //     steps {
-        //         sh "trivy fs --format table -o trivy-fs-report.html ."
-        //     }
-        // }
+        stage('File System Scan') {
+            steps {
+                sh "trivy fs --format table -o trivy-fs-report.html ."
+            }
+        }
         
-        // stage('SonarQube Analysis') {
-        //     steps {
-        //         withSonarQubeEnv ('sonar') {
-        //             sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=WeatherWise -Dsonar.projectKey=WeatherWise \
-        //                     -Dsonar.java.binaries=. '''
-        //         }
-        //     }
-        // }
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv ('sonar') {
+                    sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=WeatherWise -Dsonar.projectKey=WeatherWise \
+                            -Dsonar.java.binaries=. '''
+                }
+            }
+        }
         
-        // stage('Quality Gate') {
-        //     steps {
-        //         script {
-        //             waitForQualityGate abortPipeline: false, credentialsId: 'sonar-token'
-        //         }
-        //     }
-        // }
+        stage('Quality Gate') {
+            steps {
+                script {
+                    waitForQualityGate abortPipeline: false, credentialsId: 'sonar-token'
+                }
+            }
+        }
   
         stage('Build Docker Image') {
             steps {
@@ -77,12 +77,12 @@ pipeline {
             }
         }
 
-        // stage('Docker Image Scan') {
-        //     steps {
-        //         sh "trivy image --format table -o trivy-frontend-image-report.html 48483/weatherwisefrontend:latest"
-        //         sh "trivy image --format table -o trivy-backend-image-report.html 48483/weatherwisebackend:latest"
-        //     }
-        // }
+        stage('Docker Image Scan') {
+            steps {
+                sh "trivy image --format table -o trivy-frontend-image-report.html 48483/weatherwisefrontend:latest"
+                sh "trivy image --format table -o trivy-backend-image-report.html 48483/weatherwisebackend:latest"
+            }
+        }
                 
         stage('Push Image') {
             steps {
@@ -104,48 +104,48 @@ pipeline {
             }
         }
     }
-    // post {
-    //     always {
-    //         script {
-    //             def jobName = env.JOB_NAME
-    //             def buildNumber = env.BUILD_NUMBER
-    //             def pipelineStatus = currentBuild.result ?: 'UNKNOWN'
-    //             def bannerColor = pipelineStatus.toUpperCase() == 'SUCCESS' ? 'green' : 'red'
+    post {
+        always {
+            script {
+                def jobName = env.JOB_NAME
+                def buildNumber = env.BUILD_NUMBER
+                def pipelineStatus = currentBuild.result ?: 'UNKNOWN'
+                def bannerColor = pipelineStatus.toUpperCase() == 'SUCCESS' ? 'green' : 'red'
     
-    //             def body = """
-    //                 <html>
-    //                 <body>
-    //                 <div style="border: 4px solid ${bannerColor}; padding: 10px;">
-    //                 <h2>${jobName} - Build ${buildNumber}</h2>
-    //                 <div style="background-color: ${bannerColor}; padding: 10px;">
-    //                 <h3 style="color: white;">Pipeline Status: ${pipelineStatus.toUpperCase()}</h3>
-    //                 </div>
-    //                 <p>Check the <a href="${BUILD_URL}">console output</a>.</p>
-    //                 </div>
-    //                 </body>
-    //                 </html>
-    //             """
+                def body = """
+                    <html>
+                    <body>
+                    <div style="border: 4px solid ${bannerColor}; padding: 10px;">
+                    <h2>${jobName} - Build ${buildNumber}</h2>
+                    <div style="background-color: ${bannerColor}; padding: 10px;">
+                    <h3 style="color: white;">Pipeline Status: ${pipelineStatus.toUpperCase()}</h3>
+                    </div>
+                    <p>Check the <a href="${BUILD_URL}">console output</a>.</p>
+                    </div>
+                    </body>
+                    </html>
+                """
     
-    //             emailext (
-    //                 subject: "${jobName} - Build ${buildNumber} - ${pipelineStatus.toUpperCase()}",
-    //                 body: body,
-    //                 to: 'rishabh.teli@iiitb.ac.in',
-    //                 from: 'rishabhteli14@gmail.com',
-    //                 replyTo: 'rishabhteli14@gmail.com',
-    //                 mimeType: 'text/html',
-    //                 attachmentsPattern: 'trivy-frontend-image-report.html'
-    //             )
+                emailext (
+                    subject: "${jobName} - Build ${buildNumber} - ${pipelineStatus.toUpperCase()}",
+                    body: body,
+                    to: 'rishabh.teli@iiitb.ac.in',
+                    from: 'rishabhteli14@gmail.com',
+                    replyTo: 'rishabhteli14@gmail.com',
+                    mimeType: 'text/html',
+                    attachmentsPattern: 'trivy-frontend-image-report.html'
+                )
                 
-    //             emailext (
-    //                 subject: "${jobName} - Build ${buildNumber} - ${pipelineStatus.toUpperCase()}",
-    //                 body: body,
-    //                 to: 'rishabh.teli@iiitb.ac.in',
-    //                 from: 'rishabhteli14@gmail.com',
-    //                 replyTo: 'rishabhteli14@gmail.com',
-    //                 mimeType: 'text/html',
-    //                 attachmentsPattern: 'trivy-backend-image-report.html'
-    //             )
-    //         }
-    //     }
-    // }
+                emailext (
+                    subject: "${jobName} - Build ${buildNumber} - ${pipelineStatus.toUpperCase()}",
+                    body: body,
+                    to: 'rishabhteli0014@gmail.com',
+                    from: 'rishabhteli14@gmail.com',
+                    replyTo: 'rishabhteli14@gmail.com',
+                    mimeType: 'text/html',
+                    attachmentsPattern: 'trivy-backend-image-report.html'
+                )
+            }
+        }
+    }
 }
