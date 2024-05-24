@@ -1,7 +1,6 @@
 version: "3.3"
 
 services:
-  
   backend:
     image: 48483/weatherwisebackend:latest
     ports:
@@ -36,7 +35,7 @@ services:
       retries: 3
     volumes:
       - database-volume:/var/lib/mysql
-  
+
   frontend:
     image: 48483/weatherwisefrontend:latest
     ports:
@@ -51,13 +50,13 @@ services:
     container_name: elasticsearch
     restart: always
     volumes:
-    - elastic_data:/usr/share/elasticsearch/data/
+      - elastic_data:/usr/share/elasticsearch/data/
     environment:
       ES_JAVA_OPTS: "-Xmx256m -Xms256m"
-      discovery.type: single-node    
+      discovery.type: single-node
     ports:
-    - '9200:9200'
-    - '9300:9300'
+      - "9200:9200"
+      - "9300:9300"
     networks:
       - elk
 
@@ -66,27 +65,27 @@ services:
     container_name: logstash
     restart: always
     volumes:
-    - ./logstash/:/logstash_dir
-    command: logstash -f /logstash_dir/logstash.conf 
+      - ./logstash/:/logstash_dir
+    command: logstash -f /logstash_dir/logstash.conf
     depends_on:
       - Elasticsearch
     ports:
-    - '9600:9600'
+      - "3001:9600"
     environment:
-      LS_JAVA_OPTS: "-Xmx256m -Xms256m"    
+      LS_JAVA_OPTS: "-Xmx256m -Xms256m"
     networks:
       - elk
 
   Kibana:
     image: kibana:7.16.2
     container_name: kibana
-    restart: always       
+    restart: always
     ports:
-    - '5601:5601'
+      - "5601:5601"
     environment:
-      - ELASTICSEARCH_URL=http://elasticsearch:9200  
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
     depends_on:
-      - Elasticsearch  
+      - Elasticsearch
     networks:
       - elk
 
