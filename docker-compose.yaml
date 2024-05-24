@@ -11,9 +11,11 @@ services:
       DB_URL: jdbc:mysql://db:3306/weatherwise?createDatabaseIfNotExist=true
       DB_USERNAME: root
       DB_PASSWORD: Rishabh@1234
-      LOGGER_PATH: /home/weatherwise/logs/app.log
+      LOGS_FILE: /logs/app.log
     depends_on:
       - db
+    volumes:
+      - /home/weatherwise/logs:/logs
 
   db:
     image: mysql:latest
