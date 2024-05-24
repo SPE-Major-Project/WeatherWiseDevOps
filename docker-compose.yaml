@@ -65,7 +65,8 @@ services:
     container_name: logstash
     restart: always
     volumes:
-      - ./logstash/:/logstash_dir
+      - /home/weatherwise/logs:/logstash_logs
+      - ./logstash/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
     command: logstash -f /logstash_dir/logstash.conf
     depends_on:
       - Elasticsearch
