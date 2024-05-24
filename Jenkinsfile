@@ -28,72 +28,72 @@ pipeline {
             }
         }
         
-        // stage('Build Code'){
-        //     steps{
-        //         dir('frontend') {
-        //             sh 'npm install && npm run build'
-        //         }
-        //         dir('backend') {
-        //             sh 'mvn clean install -DskipTests'
-        //         }
-        //     }
-        // }
+        stage('Build Code'){
+            steps{
+                dir('frontend') {
+                    sh 'npm install && npm run build'
+                }
+                dir('backend') {
+                    sh 'mvn clean install -DskipTests'
+                }
+            }
+        }
 
-        // stage('File System Scan') {
-        //     steps {
-        //         sh "trivy fs --format table -o trivy-fs-report.html ."
-        //     }
-        // }
+        stage('File System Scan') {
+            steps {
+                sh "trivy fs --format table -o trivy-fs-report.html ."
+            }
+        }
         
-        // stage('SonarQube Analysis') {
-        //     steps {
-        //         withSonarQubeEnv ('sonar') {
-        //             sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=WeatherWise -Dsonar.projectKey=WeatherWise \
-        //                     -Dsonar.java.binaries=. '''
-        //         }
-        //     }
-        // }
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv ('sonar') {
+                    sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=WeatherWise -Dsonar.projectKey=WeatherWise \
+                            -Dsonar.java.binaries=. '''
+                }
+            }
+        }
         
-        // stage('Quality Gate') {
-        //     steps {
-        //         script {
-        //             waitForQualityGate abortPipeline: false, credentialsId: 'sonar-token'
-        //         }
-        //     }
-        // }
+        stage('Quality Gate') {
+            steps {
+                script {
+                    waitForQualityGate abortPipeline: false, credentialsId: 'sonar-token'
+                }
+            }
+        }
   
-        // stage('Build Docker Image') {
-        //     steps {
-        //         script {
-        //             withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
-        //                 dir('frontend') {
-        //                     sh "docker build -t 48483/weatherwisefrontend:latest -f DockerFileFrontend ."
-        //                 }
-        //                 dir('backend') {
-        //                     sh "docker build -t 48483/weatherwisebackend:latest -f DockerFileBackend ."
-        //                 }
-        //             }
-        //         }
-        //     }
-        // }
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
+                        dir('frontend') {
+                            sh "docker build -t 48483/weatherwisefrontend:latest -f DockerFileFrontend ."
+                        }
+                        dir('backend') {
+                            sh "docker build -t 48483/weatherwisebackend:latest -f DockerFileBackend ."
+                        }
+                    }
+                }
+            }
+        }
 
-        // stage('Docker Image Scan') {
-        //     steps {
-        //         sh "trivy image --format table -o trivy-frontend-image-report.html 48483/weatherwisefrontend:latest"
-        //         sh "trivy image --format table -o trivy-backend-image-report.html 48483/weatherwisebackend:latest"
-        //     }
-        // }
+        stage('Docker Image Scan') {
+            steps {
+                sh "trivy image --format table -o trivy-frontend-image-report.html 48483/weatherwisefrontend:latest"
+                sh "trivy image --format table -o trivy-backend-image-report.html 48483/weatherwisebackend:latest"
+            }
+        }
                 
-        // stage('Push Image') {
-        //     steps {
-        //         script {
-        //             withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
-        //                 sh "docker push 48483/weatherwisefrontend:latest"
-        //                 sh "docker push 48483/weatherwisebackend:latest"
-        //             }
-        //         }
-        //     }
-        // }  
+        stage('Push Image') {
+            steps {
+                script {
+                    withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
+                        sh "docker push 48483/weatherwisefrontend:latest"
+                        sh "docker push 48483/weatherwisebackend:latest"
+                    }
+                }
+            }
+        }  
 
         stage('Run Ansible Playbook') {
             steps {
