@@ -50,7 +50,7 @@ services:
     container_name: elasticsearch
     restart: always
     volumes:
-      - elastic_data:/usr/share/elasticsearch/data/
+      - elastic_data:/home/weatherwise/elasticsearch
     environment:
       ES_JAVA_OPTS: "-Xmx256m -Xms256m"
       discovery.type: single-node
@@ -65,7 +65,7 @@ services:
     container_name: logstash
     restart: always
     volumes:
-      - ./logstash/:/logstash_dir
+      - /home/weatherwise/logs/:/logstash_dir
     command: logstash -f /logstash_dir/logstash.conf
     depends_on:
       - Elasticsearch
