@@ -64,6 +64,8 @@ services:
     image: logstash:7.16.2
     container_name: logstash
     restart: always
+    volumes:
+      - ./logstash/:/logstash_dir
     command: logstash -f /logstash_dir/logstash.conf
     depends_on:
       - Elasticsearch
@@ -74,7 +76,6 @@ services:
     networks:
       - elk
 
-
   Kibana:
     image: kibana:7.16.2
     container_name: kibana
@@ -82,7 +83,7 @@ services:
     ports:
       - "5601:5601"
     environment:
-      - ELASTICSEARCH_URL=http://elasticsearch:9200/
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
     depends_on:
       - Elasticsearch
     networks:
