@@ -64,8 +64,6 @@ services:
     image: logstash:7.16.2
     container_name: logstash
     restart: always
-    volumes:
-      - /home/weatherwise/logs/:/logstash_dir
     command: logstash -f /logstash_dir/logstash.conf
     depends_on:
       - Elasticsearch
@@ -75,6 +73,7 @@ services:
       LS_JAVA_OPTS: "-Xmx256m -Xms256m"
     networks:
       - elk
+
 
   Kibana:
     image: kibana:7.16.2
